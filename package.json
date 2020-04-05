@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "setup:hasura": "heroku git:remote -a hnr-hasura --remote hasura",
+    "setup:backend": "heroku git:remote -a hnr-backend --remote backend",
+    "deploy:backend": "git subtree push --prefix backend backend master",
+    "deploy:hasura": "git subtree push --prefix hasura hasura master",
+  }
+}
