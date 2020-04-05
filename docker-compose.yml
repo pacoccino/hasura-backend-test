@@ -1,0 +1,29 @@
+---
+version: '3.6'
+
+services:
+  hasura:
+    build: ./hasura
+    depends_on:
+      - database
+    volumes:
+      - ./ako-backend/hasura/migrations:/hasura-migrations
+    environment:
+      PORT: ${HASURA_PORT}
+      DATABASE_URL: ${DATABASE_URL}
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_ADMIN_SECRET}
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: false
+
+  database:
+    image: postgres:12
+    volumes:
+      - database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+
+volumes:
+  database:
+...
