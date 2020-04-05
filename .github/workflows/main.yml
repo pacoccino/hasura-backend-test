@@ -1,0 +1,26 @@
+name: Push Container to Heroku
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Login to Heroku Container registry
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: heroku container:login 
+    - name: Add remotes
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: |
+        heroku git:remote -a hnr-hasura --remote hasura
+        heroku git:remote -a hnr-backend --remote backend
+    - name: Push remotes
+      run: |
+        git subtree push --prefix hasura hasura master
+        git subtree push --prefix backend backend master
